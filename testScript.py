@@ -1,11 +1,16 @@
 import sys
 import subprocess
 import logging
-import os
+import os 
+import math
+
+
 
 # Log dosyasının adı ve konumu
-LOG_FILE = 'C:/deneme/Degistirdim'
+LOG_FILE = 'C:/ProjeDosyasi/git_command_log.txt'
 
+def convert_path(path):
+    return path.replace('\\', '/')
 
 def main():
     # Loglama ayarları
@@ -18,18 +23,19 @@ def main():
         for arg in sys.argv:
             print(arg)
         
-        logging.info("Burayi degistirdim!!!!!!")
+        logging.info("Burayi tekrardan degistirdim (3.versiyon)!!!!!!")
         for arg in sys.argv:
             logging.info(arg)
 
-        print("\nRunning 'git --version':")
+        print("\nRunning 'degisti':")
         logging.info("Running 'git --version':")
         result = subprocess.run(['git', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("stdout:", result.stdout)
-        print("stderr:", result.stderr)
+        print("stderrorrr:", result.stderr)
         
         logging.info(f"stdout: {result.stdout}")
         logging.error(f"stderr: {result.stderr}")
+        a = math.cos(30) + math.sin(30)
 
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
