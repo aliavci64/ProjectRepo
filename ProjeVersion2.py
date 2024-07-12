@@ -32,6 +32,22 @@ def write_diff_to_word(diff, output_file):
             else:
                 doc.add_paragraph(line)
 
+        # Dosya değişikliklerini ekleyecek fonksiyon
+        def add_file_change(status, file_name):
+            if status == 'A':
+                color = RGBColor(0, 128, 0)  # Yeşil renk (eklenen dosya)
+                doc.add_paragraph(f"Added: {file_name}", style='List Bullet').runs[0].font.color.rgb = color
+            elif status == 'D':
+                color = RGBColor(255, 0, 0)  # Kırmızı renk (silinen dosya)
+                doc.add_paragraph(f"Deleted: {file_name}", style='List Bullet').runs[0].font.color.rgb = color
+            else:
+                doc.add_paragraph(f"Modified: {file_name}", style='List Bullet')
+
+        for line in diff.splitlines():
+            if line.strip():  # Satır boş değilse işlem yap
+                status, file_name = line.split(maxsplit=1)
+                add_file_change(status, file_name.strip())
+
         doc.save(output_file)
     except Exception as e:
         print(f"Error writing to Word document: {e}")
