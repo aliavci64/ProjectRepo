@@ -1,0 +1,16 @@
+diff a/testScript.py b/testScript.py	(rejected hunks)
+@@ -1,12 +1,11 @@
+ import sys
+ import subprocess
+ import logging
++import os
+ 
+ # Log dosyasının adı ve konumu
+-LOG_FILE = 'C:/ProjeDosyasi/git_command_log.txt'
++LOG_FILE = 'C:/deneme/Degistirdim'
+ 
+-def convert_path(path):
+-    return path.replace('\\', '/')
+ 
+ def main():
+     # Loglama ayarları
