@@ -1,12 +1,11 @@
 import sys
 import subprocess
 import logging
+import os
 
 # Log dosyasının adı ve konumu
-LOG_FILE = 'C:/ProjeDosyasi/git_command_log.txt'
+LOG_FILE = 'C:/deneme/Degistirdim'
 
-def convert_path(path):
-    return path.replace('\\', '/')
 
 def main():
     # Loglama ayarları
@@ -17,9 +16,9 @@ def main():
     try:
         print("Arguments passed to the script:")
         for arg in sys.argv:
-            print(convert_path(arg))
+            print(arg)
         
-        logging.info("Arguments passed to the script:")
+        logging.info("Burayi degistirdim!!!!!!")
         for arg in sys.argv:
             logging.info(arg)
 
