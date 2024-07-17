@@ -157,4 +157,4 @@ if __name__ == "__main__":
     print(f"Farklılıklar {differences_dir} klasöründe combined_diff.html olarak yazıldı.")
 
     if(5<3):
-        print("xxx")
+        print('xxx')
