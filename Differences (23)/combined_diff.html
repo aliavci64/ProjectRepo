@@ -1,0 +1,1311 @@
+<html><head><style>body { font-family: Courier, monospace; }.line-num { display: inline-block; width: 40px; }.added { background-color: #eaffea; color: green; }.removed { background-color: #ffecec; color: red; }table { width: 100%; border-collapse: collapse; }td, th { border: 1px solid #ddd; padding: 8px; vertical-align: top; }th { background-color: #f2f2f2; }.old-version { width: 50%; }.new-version { width: 50%; }</style></head><body><h2>ProjeVersion3.py</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>diff --git a/ProjeVersion3.py b/ProjeVersion3.py
+index 63ab3f4..199ceb3 100644
+<span class="removed">--- a/ProjeVersion3.py</span>
+@@ -5 +5 @@ from docx.shared import RGBColor
+<span class="removed">-import sys</span>
+@@ -11 +11 @@ def get_git_diff(commit1, commit2, repo_path, file_name):
+<span class="removed">-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True</span>
+@@ -16,0 +17 @@ def get_git_diff(commit1, commit2, repo_path, file_name):
+@@ -18 +19 @@ def get_git_diff(commit1, commit2, repo_path, file_name):
+<span class="removed">-def write_diff_to_word(diff, output_file, file_status=None, file_name=None):</span>
+@@ -21,20 +22,12 @@ def write_diff_to_word(diff, output_file, file_status=None, file_name=None):
+<span class="removed">-        doc.add_heading('File Differences:', level=1)</span>
+<span class="removed">-        </span>
+<span class="removed">-        if file_status:</span>
+<span class="removed">-            if file_status == 'A':</span>
+<span class="removed">-                doc.add_paragraph(f"File Added: {file_name}").runs[0].font.color.rgb = RGBColor(0, 128, 0)</span>
+<span class="removed">-            elif file_status == 'D':</span>
+<span class="removed">-                doc.add_paragraph(f"File Deleted: {file_name}").runs[0].font.color.rgb = RGBColor(255, 0, 0)</span>
+<span class="removed">-        else:</span>
+<span class="removed">-            for line in diff.splitlines():</span>
+<span class="removed">-                if line.startswith('-'):</span>
+<span class="removed">-                    run = doc.add_paragraph().add_run(line[1:])</span>
+<span class="removed">-                    font = run.font</span>
+<span class="removed">-                    font.color.rgb = RGBColor(0, 128, 0)  # Yeşil renk (eklenen satırlar)</span>
+<span class="removed">-                    </span>
+<span class="removed">-                elif line.startswith('+'):</span>
+<span class="removed">-                    run = doc.add_paragraph().add_run(line[1:])</span>
+<span class="removed">-                    font = run.font</span>
+<span class="removed">-                    font.color.rgb = RGBColor(255, 0, 0)  # Kırmızı renk (silinen satırlar)</span>
+<span class="removed">-                else:</span>
+<span class="removed">-                    doc.add_paragraph(line)</span>
+@@ -49 +42 @@ def get_changed_files(commit1, commit2, repo_path):
+<span class="removed">-            ['git', '-C', repo_path, 'diff', '--name-status', commit1, commit2],</span>
+@@ -62 +55 @@ if __name__ == "__main__":
+<span class="removed">-        print("Usage: python diff_to_word.py <commit1> <commit2> <repo_path> <output_dir>")</span>
+@@ -68 +61 @@ if __name__ == "__main__":
+<span class="removed">-    output_dir = convert_path(sys.argv[4])</span>
+@@ -71 +64 @@ if __name__ == "__main__":
+<span class="removed">-    print(f"Converted output_dir: {output_dir}")</span>
+@@ -75,13 +68,12 @@ if __name__ == "__main__":
+<span class="removed">-    for line in changed_files:</span>
+<span class="removed">-        status, file_name = line.split(maxsplit=1)</span>
+<span class="removed">-        output_file = os.path.join(output_dir, f"{os.path.basename(file_name)}_diff.docx")</span>
+<span class="removed">-        </span>
+<span class="removed">-        if status == 'A':</span>
+<span class="removed">-            write_diff_to_word('', output_file, 'A', file_name)</span>
+<span class="removed">-        elif status == 'D':</span>
+<span class="removed">-            write_diff_to_word('', output_file, 'D', file_name)</span>
+<span class="removed">-        else:</span>
+<span class="removed">-            diff = get_git_diff(commit1, commit2, repo_path, file_name)</span>
+<span class="removed">-            write_diff_to_word(diff, output_file)</span>
+<span class="removed">-</span>
+<span class="removed">-    print(f"Differences written to separate Word files in {output_dir}")</span></pre></td><td class="new-version"><pre>diff --git a/ProjeVersion3.py b/ProjeVersion3.py
+index 63ab3f4..199ceb3 100644
+<span class="added">+++ b/ProjeVersion3.py</span>
+@@ -5 +5 @@ from docx.shared import RGBColor
+<span class="added">+import sys </span>
+@@ -11 +11 @@ def get_git_diff(commit1, commit2, repo_path, file_name):
+<span class="added">+            stdout = subprocess.PIPE, stderr = subprocess.PIPE, text = True</span>
+@@ -16,0 +17 @@ def get_git_diff(commit1, commit2, repo_path, file_name):
+<span class="added">+    </span>
+@@ -18 +19 @@ def get_git_diff(commit1, commit2, repo_path, file_name):
+<span class="added">+def write_diff_to_word(diff, output_file):</span>
+@@ -21,20 +22,12 @@ def write_diff_to_word(diff, output_file, file_status=None, file_name=None):
+<span class="added">+        doc.add_heading('File Differences:', level = 1)</span>
+<span class="added">+        for line in diff.splitlines():</span>
+<span class="added">+            if line.startswith('-'):</span>
+<span class="added">+                run = doc.add_paragraph().add_run(line[1:])</span>
+<span class="added">+                font = run.font</span>
+<span class="added">+                font.color.rgb = RGBColor(0, 128, 0)  # Yeşil renk (eklenen satırlar)</span>
+<span class="added">+            elif line.startswith('+'):</span>
+<span class="added">+                run = doc.add_paragraph().add_run(line[1:])</span>
+<span class="added">+                font = run.font</span>
+<span class="added">+                font.color.rgb = RGBColor(255, 0, 0)  # Kırmızı renk (silinen satırlar)</span>
+<span class="added">+            else:</span>
+<span class="added">+                doc.add_paragraph(line)</span>
+@@ -49 +42 @@ def get_changed_files(commit1, commit2, repo_path):
+<span class="added">+            ['git', '-C', repo_path, 'diff', '--name-only', commit1, commit2],</span>
+@@ -62 +55 @@ if __name__ == "__main__":
+<span class="added">+        print("Usage: python diff_to_word.py <commit1> <commit2> <repo_path> <output_file>")</span>
+@@ -68 +61 @@ if __name__ == "__main__":
+<span class="added">+    output_file = convert_path(sys.argv[4])</span>
+@@ -71 +64 @@ if __name__ == "__main__":
+<span class="added">+    print(f"Converted output_file: {output_file}")</span>
+@@ -75,13 +68,12 @@ if __name__ == "__main__":
+<span class="added">+    for file_name in changed_files:</span>
+<span class="added">+        diff = get_git_diff(commit1, commit2, repo_path, file_name)</span>
+<span class="added">+        output_file = os.path.join(output_file, f"{os.path.basename(file_name)}_diff.docx")</span>
+<span class="added">+        write_diff_to_word(diff, output_file)</span>
+<span class="added">+</span>
+<span class="added">+    print(f"Diff writen to {output_file}")</span>
+<span class="added">+</span>
+<span class="added">+</span>
+<span class="added">+</span>
+<span class="added">+</span>
+<span class="added">+</span>
+<span class="added">+</span></pre></td></tr></table><h2>build/ProjeVersion3/Analysis-00.toc</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>diff --git a/build/ProjeVersion3/Analysis-00.toc b/build/ProjeVersion3/Analysis-00.toc
+index ddd8f5f..1860244 100644
+<span class="removed">--- a/build/ProjeVersion3/Analysis-00.toc</span>
+@@ -1507,2 +1507,6 @@
+<span class="removed">-  ('api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-conio-l1-1-0.dll',</span>
+@@ -1514,2 +1518,2 @@
+<span class="removed">-  ('api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-convert-l1-1-0.dll',</span>
+@@ -1517,2 +1521,2 @@
+<span class="removed">-  ('api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-heap-l1-1-0.dll',</span>
+@@ -1522,0 +1527,3 @@
+@@ -1525,0 +1533,3 @@
+@@ -1532,13 +1541,0 @@
+<span class="removed">-  ('api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+@@ -1547,0 +1545,3 @@
+@@ -1570,3 +1570,2 @@
+<span class="removed">-  ('api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -1574,3 +1573,2 @@
+<span class="removed">-  ('api-ms-win-core-processthreads-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',</span>
+@@ -1578 +1576,10 @@
+<span class="removed">-  ('api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -1580 +1587,7 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -1586,2 +1599,2 @@
+<span class="removed">-  ('api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-timezone-l1-1-0.dll',</span>
+@@ -1593,2 +1606,7 @@
+<span class="removed">-  ('api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-profile-l1-1-0.dll',</span>
+@@ -1599,4 +1617 @@
+<span class="removed">-  ('api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -1604 +1619,4 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -1608,0 +1627,6 @@
+@@ -1612,5 +1636,2 @@
+<span class="removed">-  ('api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-console-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-console-l1-1-0.dll',</span>
+@@ -1618 +1639 @@
+<span class="removed">-  ('api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+@@ -1620,7 +1641 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-util-l1-1-0.dll',</span>
+@@ -1628 +1643 @@
+<span class="removed">-  ('api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+@@ -1630,10 +1645 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+@@ -1641,2 +1647,2 @@
+<span class="removed">-  ('api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-debug-l1-1-0.dll',</span>
+@@ -1646,6 +1651,0 @@
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+@@ -1658 +1658 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -1660 +1660,13 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -1670,5 +1682 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+<span class="removed">-   'DATA'),</span>
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+@@ -1676 +1684 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+@@ -1678 +1686 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+@@ -1680 +1688 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+@@ -1682 +1690 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -1684 +1692 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -1686 +1694 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -1688 +1696 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -1690 +1698 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -1692 +1700 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -1698 +1706 @@
+<span class="removed">-  ('docx\\templates\\default-settings.xml',</span>
+@@ -1700 +1708 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-settings.xml',</span>
+@@ -1702 +1710 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -1704 +1712 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -1710,4 +1717,0 @@
+<span class="removed">-  ('docx\\py.typed',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\py.typed',</span>
+<span class="removed">-   'DATA'),</span>
+@@ -1718 +1722 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -1720 +1724 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -1722 +1726 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -1724 +1728 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -1726 +1730 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -1728 +1732 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -1730 +1734 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -1732 +1736 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -1734 +1738 @@
+<span class="removed">-  ('docx\\templates\\default-footer.xml',</span>
+@@ -1736 +1740 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-footer.xml',</span>
+@@ -1738 +1742 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -1740 +1744 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -1742 +1746 @@
+<span class="removed">-  ('docx\\templates\\default-header.xml',</span>
+@@ -1744 +1748 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-header.xml',</span>
+@@ -1746 +1750 @@
+<span class="removed">-  ('docx\\templates\\default.docx',</span>
+@@ -1748 +1752 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default.docx',</span>
+@@ -1750 +1754 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -1752 +1756 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -1754 +1758 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -1756 +1760 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -1758 +1762 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -1760 +1764 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -1762 +1766 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -1764 +1768 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -1766 +1770 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -1768 +1772 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -1770 +1774 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -1772 +1776 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -1774 +1778 @@
+<span class="removed">-  ('docx\\templates\\default-styles.xml',</span>
+@@ -1776 +1780 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-styles.xml',</span>
+@@ -1781,4 +1784,0 @@
+<span class="removed">-   'DATA'),</span>
+<span class="removed">-  ('docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span></pre></td><td class="new-version"><pre>diff --git a/build/ProjeVersion3/Analysis-00.toc b/build/ProjeVersion3/Analysis-00.toc
+index ddd8f5f..1860244 100644
+<span class="added">+++ b/build/ProjeVersion3/Analysis-00.toc</span>
+@@ -1507,2 +1507,6 @@
+<span class="added">+  ('api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-crt-environment-l1-1-0.dll',</span>
+@@ -1514,2 +1518,2 @@
+<span class="added">+  ('api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',</span>
+@@ -1517,2 +1521,2 @@
+<span class="added">+  ('api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',</span>
+@@ -1522,0 +1527,3 @@
+<span class="added">+  ('api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -1525,0 +1533,3 @@
+<span class="added">+  ('api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -1532,13 +1541,0 @@
+@@ -1547,0 +1545,3 @@
+<span class="added">+  ('api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -1570,3 +1570,2 @@
+<span class="added">+  ('api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+@@ -1574,3 +1573,2 @@
+<span class="added">+  ('api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-memory-l1-1-0.dll',</span>
+@@ -1578 +1576,10 @@
+<span class="added">+  ('api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -1580 +1587,7 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-2-0.dll',</span>
+@@ -1586,2 +1599,2 @@
+<span class="added">+  ('api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-datetime-l1-1-0.dll',</span>
+@@ -1593,2 +1606,7 @@
+<span class="added">+  ('api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-processthreads-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',</span>
+@@ -1599,4 +1617 @@
+<span class="added">+  ('api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+@@ -1604 +1619,4 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-1-0.dll',</span>
+@@ -1608,0 +1627,6 @@
+<span class="added">+  ('api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -1612,5 +1636,2 @@
+<span class="added">+  ('api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+@@ -1618 +1639 @@
+<span class="added">+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -1620,7 +1641 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -1628 +1643 @@
+<span class="added">+  ('api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -1630,10 +1645 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -1641,2 +1647,2 @@
+<span class="added">+  ('api-ms-win-core-console-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-console-l1-1-0.dll',</span>
+@@ -1646,6 +1651,0 @@
+@@ -1658 +1658 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -1660 +1660,13 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -1670,5 +1682 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -1676 +1684 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -1678 +1686 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -1680 +1688 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -1682 +1690 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+@@ -1684 +1692 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+@@ -1686 +1694 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -1688 +1696 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -1690 +1698 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -1692 +1700 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -1698 +1706 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -1700 +1708 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -1702 +1710 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -1704 +1712 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -1710,4 +1717,0 @@
+@@ -1718 +1722 @@
+<span class="added">+  ('docx\\templates\\default-settings.xml',</span>
+@@ -1720 +1724 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-settings.xml',</span>
+@@ -1722 +1726 @@
+<span class="added">+  ('docx\\templates\\default-header.xml',</span>
+@@ -1724 +1728 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-header.xml',</span>
+@@ -1726 +1730 @@
+<span class="added">+  ('docx\\templates\\default.docx',</span>
+@@ -1728 +1732 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default.docx',</span>
+@@ -1730 +1734 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -1732 +1736 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -1734 +1738 @@
+<span class="added">+  ('docx\\py.typed',</span>
+@@ -1736 +1740 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\py.typed',</span>
+@@ -1738 +1742 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -1740 +1744 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -1742 +1746 @@
+<span class="added">+  ('docx\\templates\\default-styles.xml',</span>
+@@ -1744 +1748 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-styles.xml',</span>
+@@ -1746 +1750 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+@@ -1748 +1752 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+@@ -1750 +1754 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -1752 +1756 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -1754 +1758 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -1756 +1760 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -1758 +1762 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -1760 +1764 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -1762 +1766 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -1764 +1768 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -1766 +1770 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -1768 +1772 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -1770 +1774 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -1772 +1776 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -1774 +1778 @@
+<span class="added">+  ('docx\\templates\\default-footer.xml',</span>
+@@ -1776 +1780 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-footer.xml',</span>
+@@ -1781,4 +1784,0 @@</pre></td></tr></table><h2>build/ProjeVersion3/EXE-00.toc</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>diff --git a/build/ProjeVersion3/EXE-00.toc b/build/ProjeVersion3/EXE-00.toc
+index 1341860..8329bd7 100644
+<span class="removed">--- a/build/ProjeVersion3/EXE-00.toc</span>
+@@ -156,2 +156,6 @@
+<span class="removed">-  ('api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-conio-l1-1-0.dll',</span>
+@@ -163,2 +167,2 @@
+<span class="removed">-  ('api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-convert-l1-1-0.dll',</span>
+@@ -166,2 +170,2 @@
+<span class="removed">-  ('api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-heap-l1-1-0.dll',</span>
+@@ -171,0 +176,3 @@
+@@ -174,0 +182,3 @@
+@@ -181,13 +190,0 @@
+<span class="removed">-  ('api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+@@ -196,0 +194,3 @@
+@@ -219,3 +219,2 @@
+<span class="removed">-  ('api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -223,3 +222,2 @@
+<span class="removed">-  ('api-ms-win-core-processthreads-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',</span>
+@@ -227 +225,10 @@
+<span class="removed">-  ('api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -229 +236,7 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -235,2 +248,2 @@
+<span class="removed">-  ('api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-timezone-l1-1-0.dll',</span>
+@@ -242,2 +255,7 @@
+<span class="removed">-  ('api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-profile-l1-1-0.dll',</span>
+@@ -248,4 +266 @@
+<span class="removed">-  ('api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -253 +268,4 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -257,0 +276,6 @@
+@@ -261,5 +285,2 @@
+<span class="removed">-  ('api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-console-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-console-l1-1-0.dll',</span>
+@@ -267 +288 @@
+<span class="removed">-  ('api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+@@ -269,7 +290 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-util-l1-1-0.dll',</span>
+@@ -277 +292 @@
+<span class="removed">-  ('api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+@@ -279,10 +294 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+@@ -290,2 +296,2 @@
+<span class="removed">-  ('api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-debug-l1-1-0.dll',</span>
+@@ -296,6 +301,0 @@
+<span class="removed">-  ('api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+@@ -305 +305 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -307 +307,13 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -317,5 +329 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+<span class="removed">-   'DATA'),</span>
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+@@ -323 +331 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+@@ -325 +333 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+@@ -327 +335 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+@@ -329 +337 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -331 +339 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -333 +341 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -335 +343 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -337 +345 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -339 +347 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -345 +353 @@
+<span class="removed">-  ('docx\\templates\\default-settings.xml',</span>
+@@ -347 +355 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-settings.xml',</span>
+@@ -349 +357 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -351 +359 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -357,4 +364,0 @@
+<span class="removed">-  ('docx\\py.typed',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\py.typed',</span>
+<span class="removed">-   'DATA'),</span>
+@@ -365 +369 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -367 +371 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -369 +373 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -371 +375 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -373 +377 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -375 +379 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -377 +381 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -379 +383 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -381 +385 @@
+<span class="removed">-  ('docx\\templates\\default-footer.xml',</span>
+@@ -383 +387 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-footer.xml',</span>
+@@ -385 +389 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -387 +391 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -389 +393 @@
+<span class="removed">-  ('docx\\templates\\default-header.xml',</span>
+@@ -391 +395 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-header.xml',</span>
+@@ -393 +397 @@
+<span class="removed">-  ('docx\\templates\\default.docx',</span>
+@@ -395 +399 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default.docx',</span>
+@@ -397 +401 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -399 +403 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -401 +405 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -403 +407 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -405 +409 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -407 +411 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -409 +413 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -411 +415 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -413 +417 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -415 +419 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -417 +421 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -419 +423 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -421 +425 @@
+<span class="removed">-  ('docx\\templates\\default-styles.xml',</span>
+@@ -423 +427 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-styles.xml',</span>
+@@ -428,4 +431,0 @@
+<span class="removed">-   'DATA'),</span>
+<span class="removed">-  ('docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+@@ -436 +436 @@
+<span class="removed">- 1720788948,</span></pre></td><td class="new-version"><pre>diff --git a/build/ProjeVersion3/EXE-00.toc b/build/ProjeVersion3/EXE-00.toc
+index 1341860..8329bd7 100644
+<span class="added">+++ b/build/ProjeVersion3/EXE-00.toc</span>
+@@ -156,2 +156,6 @@
+<span class="added">+  ('api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-crt-environment-l1-1-0.dll',</span>
+@@ -163,2 +167,2 @@
+<span class="added">+  ('api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',</span>
+@@ -166,2 +170,2 @@
+<span class="added">+  ('api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',</span>
+@@ -171,0 +176,3 @@
+<span class="added">+  ('api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -174,0 +182,3 @@
+<span class="added">+  ('api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -181,13 +190,0 @@
+@@ -196,0 +194,3 @@
+<span class="added">+  ('api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -219,3 +219,2 @@
+<span class="added">+  ('api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+@@ -223,3 +222,2 @@
+<span class="added">+  ('api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-memory-l1-1-0.dll',</span>
+@@ -227 +225,10 @@
+<span class="added">+  ('api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -229 +236,7 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-2-0.dll',</span>
+@@ -235,2 +248,2 @@
+<span class="added">+  ('api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-datetime-l1-1-0.dll',</span>
+@@ -242,2 +255,7 @@
+<span class="added">+  ('api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-processthreads-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',</span>
+@@ -248,4 +266 @@
+<span class="added">+  ('api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+@@ -253 +268,4 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-1-0.dll',</span>
+@@ -257,0 +276,6 @@
+<span class="added">+  ('api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -261,5 +285,2 @@
+<span class="added">+  ('api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+@@ -267 +288 @@
+<span class="added">+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -269,7 +290 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -277 +292 @@
+<span class="added">+  ('api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -279,10 +294 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -290,2 +296,2 @@
+<span class="added">+  ('api-ms-win-core-console-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-console-l1-1-0.dll',</span>
+@@ -296,6 +301,0 @@
+@@ -305 +305 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -307 +307,13 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -317,5 +329 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -323 +331 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -325 +333 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -327 +335 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -329 +337 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+@@ -331 +339 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+@@ -333 +341 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -335 +343 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -337 +345 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -339 +347 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -345 +353 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -347 +355 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -349 +357 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -351 +359 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -357,4 +364,0 @@
+@@ -365 +369 @@
+<span class="added">+  ('docx\\templates\\default-settings.xml',</span>
+@@ -367 +371 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-settings.xml',</span>
+@@ -369 +373 @@
+<span class="added">+  ('docx\\templates\\default-header.xml',</span>
+@@ -371 +375 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-header.xml',</span>
+@@ -373 +377 @@
+<span class="added">+  ('docx\\templates\\default.docx',</span>
+@@ -375 +379 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default.docx',</span>
+@@ -377 +381 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -379 +383 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -381 +385 @@
+<span class="added">+  ('docx\\py.typed',</span>
+@@ -383 +387 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\py.typed',</span>
+@@ -385 +389 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -387 +391 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -389 +393 @@
+<span class="added">+  ('docx\\templates\\default-styles.xml',</span>
+@@ -391 +395 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-styles.xml',</span>
+@@ -393 +397 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+@@ -395 +399 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+@@ -397 +401 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -399 +403 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -401 +405 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -403 +407 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -405 +409 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -407 +411 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -409 +413 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -411 +415 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -413 +417 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -415 +419 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -417 +421 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -419 +423 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -421 +425 @@
+<span class="added">+  ('docx\\templates\\default-footer.xml',</span>
+@@ -423 +427 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-footer.xml',</span>
+@@ -428,4 +431,0 @@
+@@ -436 +436 @@
+<span class="added">+ 1720786230,</span></pre></td></tr></table><h2>build/ProjeVersion3/PKG-00.toc</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>diff --git a/build/ProjeVersion3/PKG-00.toc b/build/ProjeVersion3/PKG-00.toc
+index 93dc084..7f01130 100644
+<span class="removed">--- a/build/ProjeVersion3/PKG-00.toc</span>
+@@ -133,2 +133,6 @@
+<span class="removed">-  ('api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-conio-l1-1-0.dll',</span>
+@@ -140,2 +144,2 @@
+<span class="removed">-  ('api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-convert-l1-1-0.dll',</span>
+@@ -143,2 +147,2 @@
+<span class="removed">-  ('api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-heap-l1-1-0.dll',</span>
+@@ -148,0 +153,3 @@
+@@ -151,0 +159,3 @@
+@@ -158,13 +167,0 @@
+<span class="removed">-  ('api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+@@ -173,0 +171,3 @@
+@@ -196,3 +196,2 @@
+<span class="removed">-  ('api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -200,3 +199,2 @@
+<span class="removed">-  ('api-ms-win-core-processthreads-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program '</span>
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',</span>
+@@ -204 +202,10 @@
+<span class="removed">-  ('api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -206 +213,7 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -212,2 +225,2 @@
+<span class="removed">-  ('api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-timezone-l1-1-0.dll',</span>
+@@ -219,2 +232,7 @@
+<span class="removed">-  ('api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-profile-l1-1-0.dll',</span>
+@@ -225,4 +243 @@
+<span class="removed">-  ('api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -230 +245,4 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -234,0 +253,6 @@
+@@ -238,5 +262,2 @@
+<span class="removed">-  ('api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-console-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-console-l1-1-0.dll',</span>
+@@ -244 +265 @@
+<span class="removed">-  ('api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+@@ -246,7 +267 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-util-l1-1-0.dll',</span>
+@@ -254 +269 @@
+<span class="removed">-  ('api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+@@ -256,10 +271 @@
+<span class="removed">-   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+@@ -267,2 +273,2 @@
+<span class="removed">-  ('api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-debug-l1-1-0.dll',</span>
+@@ -273,6 +278,0 @@
+<span class="removed">-  ('api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+<span class="removed">-  ('api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="removed">-   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="removed">-   'BINARY'),</span>
+@@ -282 +282 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -284 +284,13 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -294,5 +306 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+<span class="removed">-   'DATA'),</span>
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+@@ -300 +308 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+@@ -302 +310 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+@@ -304 +312 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+@@ -306 +314 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -308 +316 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -310 +318 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -312 +320 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -314 +322 @@
+<span class="removed">-  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -316 +324 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -322 +330 @@
+<span class="removed">-  ('docx\\templates\\default-settings.xml',</span>
+@@ -324 +332 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-settings.xml',</span>
+@@ -326 +334 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -328 +336 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -334,4 +341,0 @@
+<span class="removed">-  ('docx\\py.typed',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\py.typed',</span>
+<span class="removed">-   'DATA'),</span>
+@@ -342 +346 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -344 +348 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -346 +350 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -348 +352 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -350 +354 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -352 +356 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -354 +358 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -356 +360 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -358 +362 @@
+<span class="removed">-  ('docx\\templates\\default-footer.xml',</span>
+@@ -360 +364 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-footer.xml',</span>
+@@ -362 +366 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -364 +368 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -366 +370 @@
+<span class="removed">-  ('docx\\templates\\default-header.xml',</span>
+@@ -368 +372 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-header.xml',</span>
+@@ -370 +374 @@
+<span class="removed">-  ('docx\\templates\\default.docx',</span>
+@@ -372 +376 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default.docx',</span>
+@@ -374 +378 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -376 +380 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -378 +382 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -380 +384 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -382 +386 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -384 +388 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -386 +390 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -388 +392 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -390 +394 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -392 +396 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -394 +398 @@
+<span class="removed">-  ('docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -396 +400 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -398 +402 @@
+<span class="removed">-  ('docx\\templates\\default-styles.xml',</span>
+@@ -400 +404 @@
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-styles.xml',</span>
+@@ -405,4 +408,0 @@
+<span class="removed">-   'DATA'),</span>
+<span class="removed">-  ('docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+<span class="removed">-   'C:\\Users\\Amaris '</span>
+<span class="removed">-   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span></pre></td><td class="new-version"><pre>diff --git a/build/ProjeVersion3/PKG-00.toc b/build/ProjeVersion3/PKG-00.toc
+index 93dc084..7f01130 100644
+<span class="added">+++ b/build/ProjeVersion3/PKG-00.toc</span>
+@@ -133,2 +133,6 @@
+<span class="added">+  ('api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-convert-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-crt-environment-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-crt-environment-l1-1-0.dll',</span>
+@@ -140,2 +144,2 @@
+<span class="added">+  ('api-ms-win-crt-runtime-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',</span>
+@@ -143,2 +147,2 @@
+<span class="added">+  ('api-ms-win-crt-stdio-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',</span>
+@@ -148,0 +153,3 @@
+<span class="added">+  ('api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -151,0 +159,3 @@
+<span class="added">+  ('api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-conio-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -158,13 +167,0 @@
+@@ -173,0 +171,3 @@
+<span class="added">+  ('api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-crt-heap-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -196,3 +196,2 @@
+<span class="added">+  ('api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',</span>
+@@ -200,3 +199,2 @@
+<span class="added">+  ('api-ms-win-core-memory-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-memory-l1-1-0.dll',</span>
+@@ -204 +202,10 @@
+<span class="added">+  ('api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-timezone-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-debug-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-util-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+@@ -206 +213,7 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-string-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-file-l1-2-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-2-0.dll',</span>
+@@ -212,2 +225,2 @@
+<span class="added">+  ('api-ms-win-core-datetime-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-datetime-l1-1-0.dll',</span>
+@@ -219,2 +232,7 @@
+<span class="added">+  ('api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-processthreads-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program '</span>
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',</span>
+@@ -225,4 +243 @@
+<span class="added">+  ('api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+@@ -230 +245,4 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-file-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-file-l1-1-0.dll',</span>
+@@ -234,0 +253,6 @@
+<span class="added">+  ('api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-profile-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+<span class="added">+  ('api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-handle-l1-1-0.dll',</span>
+<span class="added">+   'BINARY'),</span>
+@@ -238,5 +262,2 @@
+<span class="added">+  ('api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',</span>
+@@ -244 +265 @@
+<span class="added">+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -246,7 +267 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',</span>
+@@ -254 +269 @@
+<span class="added">+  ('api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -256,10 +271 @@
+<span class="added">+   'Files\\Java\\jdk-21\\bin\\api-ms-win-core-localization-l1-2-0.dll',</span>
+@@ -267,2 +273,2 @@
+<span class="added">+  ('api-ms-win-core-console-l1-1-0.dll',</span>
+<span class="added">+   'C:\\Program Files\\Java\\jdk-21\\bin\\api-ms-win-core-console-l1-1-0.dll',</span>
+@@ -273,6 +278,0 @@
+@@ -282 +282 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+@@ -284 +284,13 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl',</span>
+<span class="added">+   'DATA'),</span>
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+<span class="added">+   'C:\\Users\\Amaris '</span>
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl',</span>
+@@ -294,5 +306 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -300 +308 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl',</span>
+@@ -302 +310 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -304 +312 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\rng\\iso-schematron.rng',</span>
+@@ -306 +314 @@
+<span class="added">+  ('lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+@@ -308 +316 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl',</span>
+@@ -310 +318 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -312 +320 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\_rels\\.rels',</span>
+@@ -314 +322 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -316 +324 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\core.xml',</span>
+@@ -322 +330 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -324 +332 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\document.xml',</span>
+@@ -326 +334 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -328 +336 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\stylesWithEffects.xml',</span>
+@@ -334,4 +341,0 @@
+@@ -342 +346 @@
+<span class="added">+  ('docx\\templates\\default-settings.xml',</span>
+@@ -344 +348 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-settings.xml',</span>
+@@ -346 +350 @@
+<span class="added">+  ('docx\\templates\\default-header.xml',</span>
+@@ -348 +352 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-header.xml',</span>
+@@ -350 +354 @@
+<span class="added">+  ('docx\\templates\\default.docx',</span>
+@@ -352 +356 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default.docx',</span>
+@@ -354 +358 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -356 +360 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\numbering.xml',</span>
+@@ -358 +362 @@
+<span class="added">+  ('docx\\py.typed',</span>
+@@ -360 +364 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\py.typed',</span>
+@@ -362 +366 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -364 +368 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\[Content_Types].xml',</span>
+@@ -366 +370 @@
+<span class="added">+  ('docx\\templates\\default-styles.xml',</span>
+@@ -368 +372 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-styles.xml',</span>
+@@ -370 +374 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+@@ -372 +376 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\customXml\\itemProps1.xml',</span>
+@@ -374 +378 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -376 +380 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\fontTable.xml',</span>
+@@ -378 +382 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -380 +384 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\app.xml',</span>
+@@ -382 +386 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -384 +388 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\settings.xml',</span>
+@@ -386 +390 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -388 +392 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\docProps\\thumbnail.jpeg',</span>
+@@ -390 +394 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -392 +396 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\_rels\\document.xml.rels',</span>
+@@ -394 +398 @@
+<span class="added">+  ('docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -396 +400 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-docx-template\\word\\theme\\theme1.xml',</span>
+@@ -398 +402 @@
+<span class="added">+  ('docx\\templates\\default-footer.xml',</span>
+@@ -400 +404 @@
+<span class="added">+   'Consulting\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\docx\\templates\\default-footer.xml',</span>
+@@ -405,4 +408,0 @@</pre></td></tr></table><h2>build/ProjeVersion3/ProjeVersion3.pkg</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>diff --git a/build/ProjeVersion3/ProjeVersion3.pkg b/build/ProjeVersion3/ProjeVersion3.pkg
+index cd187b2..aba3d78 100644
+Binary files a/build/ProjeVersion3/ProjeVersion3.pkg and b/build/ProjeVersion3/ProjeVersion3.pkg differ</pre></td><td class="new-version"><pre>diff --git a/build/ProjeVersion3/ProjeVersion3.pkg b/build/ProjeVersion3/ProjeVersion3.pkg
+index cd187b2..aba3d78 100644
+Binary files a/build/ProjeVersion3/ProjeVersion3.pkg and b/build/ProjeVersion3/ProjeVersion3.pkg differ</pre></td></tr></table><h2>build/ProjeVersion3/warn-ProjeVersion3.txt</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>diff --git a/build/ProjeVersion3/warn-ProjeVersion3.txt b/build/ProjeVersion3/warn-ProjeVersion3.txt
+index e101e6e..f11a177 100644
+<span class="removed">--- a/build/ProjeVersion3/warn-ProjeVersion3.txt</span>
+@@ -23 +23 @@ missing module named grp - imported by shutil (delayed, optional), tarfile (opti
+<span class="removed">-missing module named posix - imported by os (conditional, optional), posixpath (optional), shutil (conditional), importlib._bootstrap_external (conditional)</span></pre></td><td class="new-version"><pre>diff --git a/build/ProjeVersion3/warn-ProjeVersion3.txt b/build/ProjeVersion3/warn-ProjeVersion3.txt
+index e101e6e..f11a177 100644
+<span class="added">+++ b/build/ProjeVersion3/warn-ProjeVersion3.txt</span>
+@@ -23 +23 @@ missing module named grp - imported by shutil (delayed, optional), tarfile (opti
+<span class="added">+missing module named posix - imported by os (conditional, optional), shutil (conditional), importlib._bootstrap_external (conditional), posixpath (optional)</span></pre></td></tr></table><h2>dist/ProjeVersion3.exe</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>diff --git a/dist/ProjeVersion3.exe b/dist/ProjeVersion3.exe
+index b32bcdb..3912bb7 100644
+Binary files a/dist/ProjeVersion3.exe and b/dist/ProjeVersion3.exe differ</pre></td><td class="new-version"><pre>diff --git a/dist/ProjeVersion3.exe b/dist/ProjeVersion3.exe
+index b32bcdb..3912bb7 100644
+Binary files a/dist/ProjeVersion3.exe and b/dist/ProjeVersion3.exe differ</pre></td></tr></table><h2>dosya/Analysis-00.toc_diff.docx</h2><table><tr><th class="old-version">Old Version</th><th class="new-version">New Version</th></tr><tr><td class="old-version"><pre>

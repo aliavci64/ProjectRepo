@@ -41,7 +41,7 @@ def write_diff_to_html(diffs, output_file):
             f.write('.added { background-color: #eaffea; color: green; }')
             f.write('.removed { background-color: #ffecec; color: red; }')
             f.write('table { width: 100%; border-collapse: collapse; }')
-            f.write('td, th { border: 1px solid #ddd; padding: 8px; vertical-align: top; }')
+            f.write('td, th { border: 1px solid #ddd; padding: 8px; }')
             f.write('th { background-color: #f2f2f2; }')
             f.write('</style></head><body>')
 
@@ -50,69 +50,39 @@ def write_diff_to_html(diffs, output_file):
                 file_name = diff_data['file_name']
                 file_status = diff_data['file_status']
                 file_content = diff_data['file_content']
-
-                f.write(f'<h2>{file_name} Dosyasındaki Farklılıklar:</h2>')
-
+                
+                f.write(f'<h2>{file_name}</h2>')
                 if file_status == 'A':
-                    f.write(f'<p><b>File added: {file_name}</b></p>')
-                    f.write('<table><tr><th>New Version</th></tr><tr><td class="added"><pre>')
-                    for i, line in enumerate(file_content.splitlines(), 1):
-                        f.write(f'<span class="line-num">{i}</span> + {line.strip()}\n')
+                    f.write('<p><strong>File Added</strong></p>')
+                    f.write('<table><tr><th>New Version</th></tr>')
+                    f.write('<tr><td><pre class="added">')
+                    f.write(file_content)
                     f.write('</pre></td></tr></table>')
                 elif file_status == 'D':
-                    f.write(f'<p><b>File deleted: {file_name}</b></p>')
-                    f.write('<table><tr><th>Old Version</th></tr><tr><td class="removed"><pre>')
-                    for i, line in enumerate(file_content.splitlines(), 1):
-                        f.write(f'<span class="line-num">{i}</span> - {line.strip()}\n')
+                    f.write('<p><strong>File Deleted</strong></p>')
+                    f.write('<table><tr><th>Old Version</th></tr>')
+                    f.write('<tr><td><pre class="removed">')
+                    f.write(file_content)
                     f.write('</pre></td></tr></table>')
                 else:
-                    lines = diff.splitlines()
-                    lines = [line for line in lines if not (line.startswith('diff --git') or line.startswith('index ') or line.startswith('--- ') or line.startswith('+++ '))]
-                    difference_count = sum(1 for line in lines if line.startswith('-') or line.startswith('+'))
-                    function_names = extract_function_names(diff)
-
-                    f.write(f'<p><b>Farklılık Sayısı: {difference_count}</b></p>')
-                    f.write(f'<p><b>Farklılık Olan Fonksiyonlar: {", ".join(function_names)}</b></p>')
-
                     f.write('<table><tr><th>Old Version</th><th>New Version</th></tr>')
-
-                    old_lines = []
-                    new_lines = []
-                    old_line_num = 0
-                    new_line_num = 0
-
-                    for line in lines:
-                        if line.startswith('@@'):
-                            parts = line.split(' ')
-                            old_line_num = int(parts[1].split(',')[0][1:])
-                            new_line_num = int(parts[2].split(',')[0][1:])
-                            f.write('<tr><td colspan="2"><hr></td></tr>')
+                    for line in diff.splitlines():
+                        if line.startswith('+'):
+                            f.write('<tr><td></td><td class="added">')
+                            f.write(line[1:])
+                            f.write('</td></tr>')
                         elif line.startswith('-'):
-                            old_lines.append((old_line_num, line))
-                            old_line_num += 1
-                        elif line.startswith('+'):
-                            new_lines.append((new_line_num, line))
-                            new_line_num += 1
-                        else:
-                            old_lines.append((old_line_num, line))
-                            new_lines.append((new_line_num, line))
-                            old_line_num += 1
-                            new_line_num += 1
-
-                    max_lines = max(len(old_lines), len(new_lines))
-                    for i in range(max_lines):
-                        old_line = old_lines[i] if i < len(old_lines) else ('', '')
-                        new_line = new_lines[i] if i < len(new_lines) else ('', '')
-                        f.write('<tr>')
-                        f.write(f'<td class="added"><pre><span class="line-num">{old_line[0]}</span> + {old_line[1][1:]}</pre></td>')
-                        f.write(f'<td class="removed"><pre><span class="line-num">{new_line[0]}</span> - {new_line[1][1:]}</pre></td>')
-                        f.write('</tr>')
-
+                            f.write('<tr><td class="removed">')
+                            f.write(line[1:])
+                            f.write('</td><td></td></tr>')
                     f.write('</table>')
 
             f.write('</body></html>')
     except Exception as e:
-        print(f"HTML dosyasına yazarken hata oluştu: {e}")
+        print(f"An error occurred while writing to HTML: {e}")
+
+def convert_path(path):
+    return os.path.abspath(path)
 
 def get_changed_files(commit1, commit2, repo_path):
     try:
@@ -127,15 +97,12 @@ def get_changed_files(commit1, commit2, repo_path):
 def get_commit_diff(commit, repo_path):
     try:
         result = subprocess.run(
-            ['git', '-C', repo_path, 'diff-tree', '--no-commit-id', '--name-status', '-r', commit],
+            ['git', '-C', repo_path, 'diff', '--name-status', commit + '^!', commit],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8'
         )
         return result.stdout.splitlines()
     except Exception as e:
         return str(e)
-
-def convert_path(path):
-    return path.replace('\\', '/')
 
 def create_unique_output_dir(base_dir):
     counter = 1
@@ -188,3 +155,6 @@ if __name__ == "__main__":
     write_diff_to_html(diffs, output_file)
 
     print(f"Farklılıklar {differences_dir} klasöründe combined_diff.html olarak yazıldı.")
+
+    if(5<3):
+        print("xxx")
