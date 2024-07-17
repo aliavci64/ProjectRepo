@@ -4,12 +4,14 @@ from docx import Document
 from docx.shared import RGBColor
 import sys 
 
-def get_git_diff(commit1, commit2, repo_path, file_name):
+def get_git_diff(commit1, commit2, repo_dir, file_name):
     try:
         result = subprocess.run(
-            ['git', '-C', repo_path, 'diff', commit1, commit2, '--', file_name],
+            ['git', '-C', repo_dir, 'diff', commit1, commit2, '--', file_name],
             stdout = subprocess.PIPE, stderr = subprocess.PIPE, text = True
         )
+        if(False):
+            print("Buraya ekleme yaptık")
         return result.stdout
     
     except Exception as e:
@@ -24,7 +26,7 @@ def write_diff_to_word(diff, output_file):
             if line.startswith('-'):
                 run = doc.add_paragraph().add_run(line[1:])
                 font = run.font
-                font.color.rgb = RGBColor(0, 128, 0)  # Yeşil renk (eklenen satırlar)
+                font.color.rgb = RGBColor(0, 255, 0)  # Yeşil renk (eklenen satırlar)
             elif line.startswith('+'):
                 run = doc.add_paragraph().add_run(line[1:])
                 font = run.font
@@ -47,8 +49,6 @@ def get_changed_files(commit1, commit2, repo_path):
     except Exception as e:
         return str(e)
 
-def convert_path(path):
-    return path.replace('\\', '/')
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
@@ -57,8 +57,8 @@ if __name__ == "__main__":
     
     commit1 = sys.argv[1]
     commit2 = sys.argv[2]
-    repo_path = convert_path(sys.argv[3])
-    output_file = convert_path(sys.argv[4])
+    repo_path = sys.argv[3]
+    output_file = sys.argv[4]
 
     print(f"Converted repo_path: {repo_path}")
     print(f"Converted output_file: {output_file}")
