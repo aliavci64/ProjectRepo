@@ -41,7 +41,7 @@ def write_diff_to_html(diffs, output_file):
             f.write('.added { background-color: #eaffea; color: green; }')
             f.write('.removed { background-color: #ffecec; color: red; }')
             f.write('table { width: 100%; border-collapse: collapse; }')
-            f.write('td, th { border: 1px solid #ddd; padding: 8px; }')
+            f.write('td, th { border: 1px solid #ddd; padding: 8px; vertical-align: top; }')
             f.write('th { background-color: #f2f2f2; }')
             f.write('</style></head><body>')
 
@@ -76,6 +76,8 @@ def write_diff_to_html(diffs, output_file):
 
                     f.write('<table><tr><th>Old Version</th><th>New Version</th></tr>')
 
+                    old_lines = []
+                    new_lines = []
                     old_line_num = 0
                     new_line_num = 0
 
@@ -86,15 +88,25 @@ def write_diff_to_html(diffs, output_file):
                             new_line_num = int(parts[2].split(',')[0][1:])
                             f.write('<tr><td colspan="2"><hr></td></tr>')
                         elif line.startswith('-'):
-                            f.write(f'<tr><td class="removed"><pre><span class="line-num">{old_line_num}</span> - {line[1:]}</pre></td><td></td></tr>')
+                            old_lines.append((old_line_num, line))
                             old_line_num += 1
                         elif line.startswith('+'):
-                            f.write(f'<tr><td></td><td class="added"><pre><span class="line-num">{new_line_num}</span> + {line[1:]}</pre></td></tr>')
+                            new_lines.append((new_line_num, line))
                             new_line_num += 1
                         else:
-                            f.write(f'<tr><td><pre><span class="line-num">{old_line_num}</span> {line}</pre></td><td><pre><span class="line-num">{new_line_num}</span> {line}</pre></td></tr>')
+                            old_lines.append((old_line_num, line))
+                            new_lines.append((new_line_num, line))
                             old_line_num += 1
                             new_line_num += 1
+
+                    max_lines = max(len(old_lines), len(new_lines))
+                    for i in range(max_lines):
+                        old_line = old_lines[i] if i < len(old_lines) else ('', '')
+                        new_line = new_lines[i] if i < len(new_lines) else ('', '')
+                        f.write('<tr>')
+                        f.write(f'<td class="added"><pre><span class="line-num">{old_line[0]}</span> + {old_line[1][1:]}</pre></td>')
+                        f.write(f'<td class="removed"><pre><span class="line-num">{new_line[0]}</span> - {new_line[1][1:]}</pre></td>')
+                        f.write('</tr>')
 
                     f.write('</table>')
 
