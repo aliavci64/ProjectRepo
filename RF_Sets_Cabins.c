@@ -49,18 +49,18 @@ const stCabinSetsTemperature_Flash fahrenheitCelciusTable = {
 #pragma location = 0x1E000 + sizeof(stRefrigerator_Flash)
 const stCabinSetsDatas_Flash cabinSetsDatasTable_F[] = {                                //<-------- Door Open---------><-------Door Close--------->
 //      {                 display   , c_CI_Temp   , c_CO_Temp   , f_CI_Temp   , fCO_Temp    , lTH_CI_Temp , lTH_CO_Temp , lTH_CI_Temp , lTH_CO_Temp },
-/* 0*/  { (unsigned char) _dispQFF  , 10          , 7           , 10          , 7           , -5    , -3    , -5     , -3    },
+/* 0*/  { (unsigned char) _dispQFF  , 10          , 0           , 10          , 0          , -5    , -3    , -5     , -3    },
 /* 1*/  { (unsigned char) _dispVAC  , 138         , 115         , 138         , 115         , 25    , 35    , 25    , 35    },
-/* 2*/  { (unsigned char) _dispQFRZ , -250        , -300        , -250        , -300        , 0     , 0     , 0     , 0     },
+/* 2*/  { (unsigned char) _dispQFRZ , -250        , -350        , -250        , -350        , 0     , 0     , 0     , 0     },
   
 /* 3*/  { (unsigned char) 1        , 3     , 0     , 3     , 0     , 0     ,  5    , 0     , 5     },
 /* 4*/  { (unsigned char) 2        , 12    , 9     , 12    , 9     , 0     , 10    , 0     , 10    },
-/* 5*/  { (unsigned char) 3        , 20    , 17    , 20    , 17    , 10    , 15    , 10    , 15    },
-/* 6*/  { (unsigned char) 4        , 45    , 42    , 45    , 42    , 10    , 15    , 10    , 15    },
-/* 7*/  { (unsigned char) 5        , 49    , 46    , 49    , 46    , 15    , 25    , 15    , 25    },
-/* 8*/  { (unsigned char) 6        , 53    , 50    , 53    , 50    , 20    , 30    , 20    , 30    },
-/* 9*/  { (unsigned char) 7        , 57    , 54    , 57    , 54    , 20    , 30    , 20    , 30    },
-/*10*/  { (unsigned char) 8        , 61    , 58    , 61    , 58    , 20    , 30    , 20    , 30    },
+/* 5*/  { (unsigned char) 3        , 17    , 14    , 17    , 14    , 10    , 15    , 10    , 15    },
+/* 6*/  { (unsigned char) 4        , 20    , 17    , 20    , 17    , 10    , 15    , 10    , 15    },
+/* 7*/  { (unsigned char) 5        , 26    , 23    , 26    , 23    , 15    , 25    , 15    , 25    },
+/* 8*/  { (unsigned char) 6        , 29    , 26    , 29    , 26    , 20    , 30    , 20    , 30    },
+/* 9*/  { (unsigned char) 7        , 36    , 33    , 36    , 33    , 20    , 30    , 20    , 30    },
+/*10*/  { (unsigned char) 8        , 45    , 42    , 45    , 42    , 20    , 30    , 20    , 30    },
 
 /*11*/  { (unsigned char)-24       , -203  , -207  , -203  , -207  , 0     , 0     , 0     ,  0    },
 /*12*/  { (unsigned char)-23       , -202  , -206  , -202  , -206  , 0     , 0     , 0     ,  0    },
@@ -75,8 +75,8 @@ const stCabinSetsDatas_Flash cabinSetsDatasTable_F[] = {                        
 /*19*/  { (unsigned char) _dispFRZOFF , 138 , 115   , 138   , 115   , 0     , 0     , 0     ,  0    },
 };
 
-const signed int CoolAmbientOffsetDO[] =  { 26, 9, -5, -10, -15};
-const signed int CoolAmbientOffsetDC[] =  { 26, 9, -5, -10, -15};
+const signed int CoolAmbientOffsetDO[] =  { 26, 9, 6, 9, 0};
+const signed int CoolAmbientOffsetDC[] =  { 26, 9, 6, 9, 0};
 const signed int FRZAmbientOffset[] = {10, 0, 0, 0, 0};
 
 //#pragma default_variable_attributes =       // ozgur
